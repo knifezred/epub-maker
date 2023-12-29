@@ -113,7 +113,12 @@
                     <v-btn class="text-none mb-4 mr-5" color="grey-darken-3" variant="flat">
                       保存
                     </v-btn>
-                    <v-btn class="text-none mb-4" color="indigo-darken-2" variant="flat">
+                    <v-btn
+                      class="text-none mb-4"
+                      color="indigo-darken-2"
+                      variant="flat"
+                      @click="chapterEdit"
+                    >
                       章节编辑
                     </v-btn>
                   </v-col>
@@ -167,15 +172,22 @@
         </v-window>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col> info </v-col>
-    </v-row>
+    <v-bottom-sheet v-model="sheet">
+      <v-card class="text-center" height="600">
+        <v-card-text>
+          <v-btn variant="text" @click="sheet = !sheet"> close </v-btn>
+          <v-list :items="chapters" item-title="text" item-value="index" :height="535"></v-list>
+        </v-card-text>
+      </v-card>
+    </v-bottom-sheet>
   </v-container>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-const txtFile = ref(undefined)
+import { matchChapter, matchDesc } from '@renderer/utils/TextContentUtil'
+import { Ref, ref } from 'vue'
+const txtFile: Ref<File[]> | Ref<undefined> = ref(undefined)
 const outputDir = ref('./')
+let sheet = ref(false)
 const book = ref({
   title: '',
   author: '',
@@ -184,11 +196,11 @@ const book = ref({
 const setting = ref({
   autoSaveCss: true,
   cssType: 'css1',
-  chapterEasy: true,
+  chapterEasy: false,
   chapterEasy1: '第',
   chapterEasy2: '混合型数字',
   chapterEasy3: '章',
-  chapterRegex: false,
+  chapterRegex: true,
   chapterRegexMode: '^\\s*[第卷][0123456789一二三四五六七八九零〇百千万两]*[章卷回节集部].*'
 })
 function changeEasy() {
@@ -198,32 +210,60 @@ function changeRegex() {
   setting.value.chapterEasy = !setting.value.chapterRegex
 }
 const tab = ref(null)
+let txtContent = ''
+let chapters = []
 function loadFile() {
-  let fileName = txtFile.value[0].name
-  let bookTitle = fileName
-  if (fileName.indexOf('作者') > -1) {
-    book.value.author = fileName
-      .split('作者')[1]
-      .split(' ')[0]
-      .replace(':', '')
-      .replace('：', '')
-      .replace('.txt', '')
-    bookTitle = fileName.split('作者')[0]
+  if (txtFile.value != undefined && txtFile.value[0] != undefined) {
+    const fileName = txtFile.value[0].name
+    txtFile.value[0].text().then((res) => {
+      txtContent = res
+
+      if (txtContent.indexOf('简介') > -1) {
+        book.value.desc = matchDesc(txtContent)
+      }
+    })
+    let bookTitle = fileName
+    if (fileName.indexOf('作者') > -1) {
+      book.value.author = fileName
+        .split('作者')[1]
+        .split(' ')[0]
+        .replace(':', '')
+        .replace('：', '')
+        .replace('.txt', '')
+      bookTitle = fileName.split('作者')[0]
+    }
+    if (fileName.indexOf('《') > -1) {
+      bookTitle = fileName.split('《')[1].split('》')[0]
+    }
+    if (fileName.indexOf('【') > -1) {
+      bookTitle = fileName.split('【')[1].split('】')[0]
+    }
+    if (fileName.indexOf('[') > -1) {
+      bookTitle = fileName.split('[')[1].split(']')[0]
+    }
+    bookTitle = bookTitle.replace('.txt', '')
+    book.value.title = bookTitle
+
+    console.log('info' + txtFile.value)
+  } else {
+    book.value = {
+      title: '',
+      author: '',
+      desc: ''
+    }
   }
-  if (fileName.indexOf('《') > -1) {
-    bookTitle = fileName.split('《')[1].split('》')[0]
+}
+function chapterEdit() {
+  let matchRule = ''
+  if (setting.value.chapterEasy) {
+    matchRule = setting.value.chapterEasy1 + setting.value.chapterEasy2 + setting.value.chapterEasy3
+  } else {
+    matchRule = setting.value.chapterRegexMode
   }
-  if (fileName.indexOf('【') > -1) {
-    bookTitle = fileName.split('【')[1].split('】')[0]
-  }
-  if (fileName.indexOf('[') > -1) {
-    bookTitle = fileName.split('[')[1].split(']')[0]
-  }
-  bookTitle = bookTitle.replace('.txt', '')
-  book.value.title = bookTitle
-  console.log('info' + txtFile.value)
+  chapters = matchChapter(txtContent, matchRule)
+  sheet.value = true
 }
 function doConvert() {
-  console.log('convert')
+  console.log('todo')
 }
 </script>
