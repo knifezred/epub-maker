@@ -5,13 +5,7 @@
         <v-card elevation="1">
           <v-row>
             <v-col :cols="3">
-              <v-img
-                :width="225"
-                :height="300"
-                aspect-ratio="1"
-                cover
-                src="../../static/imgs/t2.webp"
-              ></v-img>
+              <v-img :width="225" :height="300" aspect-ratio="1" cover src="/imgs/t1.webp"></v-img>
             </v-col>
             <v-col :cols="4">
               <v-card>
@@ -33,6 +27,12 @@
                 label="生成目录"
                 prepend-icon="mdi-folder-outline"
               ></v-text-field>
+              <v-file-input
+                v-model="book.cover"
+                accept="image/*"
+                label="封面"
+                prepend-icon="mdi-camera"
+              ></v-file-input>
               <v-btn
                 class="text-none mb-4 mr-4"
                 color="blue-darken-2"
@@ -183,14 +183,16 @@
   </v-container>
 </template>
 <script setup lang="ts">
+import { generateZip } from '@renderer/utils/GenerateUtil'
 import { matchChapter, matchDesc } from '@renderer/utils/TextContentUtil'
 import { Ref, ref } from 'vue'
 const txtFile: Ref<File[]> | Ref<undefined> = ref(undefined)
-const outputDir = ref('./')
-let sheet = ref(false)
+const outputDir = ref('D:/')
+const sheet = ref(false)
 const book = ref({
   title: '',
   author: '',
+  cover: [] as File[],
   desc: ''
 })
 const setting = ref({
@@ -210,10 +212,12 @@ function changeRegex() {
   setting.value.chapterEasy = !setting.value.chapterRegex
 }
 const tab = ref(null)
+let matchRule = setting.value.chapterRegexMode
 let txtContent = ''
-let chapters = []
+let chapters: Array<ZipFile> = []
 function loadFile() {
   if (txtFile.value != undefined && txtFile.value[0] != undefined) {
+    chapters = matchChapter(txtContent, matchRule)
     const fileName = txtFile.value[0].name
     txtFile.value[0].text().then((res) => {
       txtContent = res
@@ -249,12 +253,12 @@ function loadFile() {
     book.value = {
       title: '',
       author: '',
+      cover: [],
       desc: ''
     }
   }
 }
 function chapterEdit() {
-  let matchRule = ''
   if (setting.value.chapterEasy) {
     matchRule = setting.value.chapterEasy1 + setting.value.chapterEasy2 + setting.value.chapterEasy3
   } else {
@@ -264,6 +268,14 @@ function chapterEdit() {
   sheet.value = true
 }
 function doConvert() {
-  console.log('todo')
+  generateZip(
+    book.value.title,
+    book.value.author,
+    book.value.desc,
+    book.value.cover[0].path,
+    chapters,
+    txtContent,
+    outputDir.value
+  )
 }
 </script>

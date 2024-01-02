@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto mt-16" elevation="1" max-width="500">
-    <img src="../../static/logo2.png" class="login-logo" />
+    <img src="/logo.png" class="login-logo" />
     <v-card-title class="py-5 font-weight-black">Fridayboot Electron</v-card-title>
 
     <v-card-text> Open-source App for free. just for fun </v-card-text>

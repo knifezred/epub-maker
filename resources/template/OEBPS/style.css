@@ -1,0 +1,53 @@
+.cover {
+  height: 100%;
+  text-align: center;
+  padding: 0px;
+}
+.titletoc,
+.titlel1top,
+.titlel1std,
+.titlel2top,
+.titlel2std,
+.titlel3top,
+.titlel3std,
+.titlel4std,
+.titlel1single,
+.titlel2single,
+.titlel3single {
+  margin: 20px 0px;
+}
+.titletoc::before,
+.titlel1top::before,
+.titlel1std::before,
+.titlel2top::before,
+.titlel2std::before,
+.titlel3top::before,
+.titlel3std::before,
+.titlel4std::before,
+.titlel1single::before,
+.titlel2single::before,
+.titlel3single::before {
+  content: ' ';
+  display: inline-block;
+  background: #7852e0;
+  opacity: 1;
+  pointer-events: none;
+  border-radius: 15px;
+  width: 10px;
+  vertical-align: middle;
+  margin-right: 15px;
+  height: 2.4rem;
+}
+.titletoc,
+.titlel1single,
+.titlel2single,
+.titlel3single {
+  text-align: center;
+}
+
+.tocl2 {
+  margin: 4px;
+}
+.tocl2 a {
+  text-decoration: none;
+}

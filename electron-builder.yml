@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: fridayboot-electron
+appId: org.knifez.app
+productName: epub-maker
 directories:
   buildResources: build
 files:
@@ -11,9 +11,8 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
-  - static/**
 win:
-  executableName: fridayboot-electron
+  executableName: eBookMaker
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
