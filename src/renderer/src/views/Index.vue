@@ -217,11 +217,10 @@ let txtContent = ''
 let chapters: Array<ZipFile> = []
 function loadFile() {
   if (txtFile.value != undefined && txtFile.value[0] != undefined) {
-    chapters = matchChapter(txtContent, matchRule)
     const fileName = txtFile.value[0].name
     txtFile.value[0].text().then((res) => {
       txtContent = res
-
+      chapters = matchChapter(txtContent, matchRule)
       if (txtContent.indexOf('简介') > -1) {
         book.value.desc = matchDesc(txtContent)
       }
