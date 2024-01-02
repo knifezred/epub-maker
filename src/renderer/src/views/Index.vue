@@ -74,19 +74,19 @@
                   <v-col>
                     <v-select
                       v-model="setting.chapterEasy1"
-                      :items="['第', '卷', '[第卷]']"
+                      :items="['第', '卷', '第卷']"
                     ></v-select>
                   </v-col>
                   <v-col>
                     <v-select
                       v-model="setting.chapterEasy2"
-                      :items="['混合型数字', '纯中文数字', '纯英文数字']"
+                      :items="['混合型数字', '纯中文数字', '阿拉伯数字']"
                     ></v-select>
                   </v-col>
                   <v-col>
                     <v-select
                       v-model="setting.chapterEasy3"
-                      :items="['章', '卷', '回', '节', '集', '部', '[章卷回节集部]']"
+                      :items="['章', '卷', '回', '节', '集', '部', '章卷回节集部']"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -187,7 +187,7 @@ import { generateZip } from '@renderer/utils/GenerateUtil'
 import { matchChapter, matchDesc } from '@renderer/utils/TextContentUtil'
 import { Ref, ref } from 'vue'
 const txtFile: Ref<File[]> | Ref<undefined> = ref(undefined)
-const outputDir = ref('D:/')
+const outputDir = ref('F:/')
 const sheet = ref(false)
 const book = ref({
   title: '',
@@ -203,7 +203,7 @@ const setting = ref({
   chapterEasy2: '混合型数字',
   chapterEasy3: '章',
   chapterRegex: true,
-  chapterRegexMode: '^\\s*[第卷][0123456789一二三四五六七八九零〇百千万两]*[章卷回节集部].*'
+  chapterRegexMode: '^\\s*[第卷][0123456789一二三四五六七八九十零〇百千万两]*[章卷回节集部].*'
 })
 function changeEasy() {
   setting.value.chapterRegex = !setting.value.chapterEasy
@@ -259,7 +259,35 @@ function loadFile() {
 }
 function chapterEdit() {
   if (setting.value.chapterEasy) {
-    matchRule = setting.value.chapterEasy1 + setting.value.chapterEasy2 + setting.value.chapterEasy3
+    matchRule =
+      '^\\s*[' +
+      setting.value.chapterEasy1 +
+      '][0123456789一二三四五六七八九零十〇百千万两]*[' +
+      setting.value.chapterEasy3 +
+      '].*'
+    if (setting.value.chapterEasy2 == '混合型数字') {
+      matchRule =
+        '^\\s*[' +
+        setting.value.chapterEasy1 +
+        '][0123456789一二三四五六七八九零十〇百千万两]*[' +
+        setting.value.chapterEasy3 +
+        '].*'
+    } else if (setting.value.chapterEasy2 == '纯中文数字') {
+      matchRule =
+        '^\\s*[' +
+        setting.value.chapterEasy1 +
+        '][一二三四五六七八九零十〇百千万两]*[' +
+        setting.value.chapterEasy3 +
+        '].*'
+    } else {
+      matchRule =
+        '^\\s*[' +
+        setting.value.chapterEasy1 +
+        '][0123456789]*[' +
+        setting.value.chapterEasy3 +
+        '].*'
+    }
+    // + setting.value.chapterEasy2 + setting.value.chapterEasy3
   } else {
     matchRule = setting.value.chapterRegexMode
   }
