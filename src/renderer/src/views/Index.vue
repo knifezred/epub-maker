@@ -5,7 +5,13 @@
         <v-card elevation="1">
           <v-row>
             <v-col :cols="3">
-              <v-img :width="225" :height="300" aspect-ratio="1" cover src="/imgs/t1.webp"></v-img>
+              <v-img
+                :width="225"
+                :height="300"
+                aspect-ratio="1"
+                cover
+                :src="book.cover.length > 0 ? book.cover[0].path : '/imgs/t1.webp'"
+              ></v-img>
             </v-col>
             <v-col :cols="4">
               <v-card>
@@ -41,9 +47,6 @@
                 @click="doConvert"
               >
                 开始转换
-              </v-btn>
-              <v-btn class="text-none mb-4" color="blue-darken-2" size="x-large" variant="flat">
-                编辑txt文件
               </v-btn>
             </v-col>
           </v-row>
@@ -257,6 +260,7 @@ function loadFile() {
     }
   }
 }
+
 function chapterEdit() {
   if (setting.value.chapterEasy) {
     matchRule =
