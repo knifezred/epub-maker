@@ -183,15 +183,20 @@
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
+    <v-snackbar v-model="snackbar.show" :timeout="2000" color="deep-purple-accent-4" elevation="24">
+      {{ snackbar.message }}
+    </v-snackbar>
   </v-container>
 </template>
 <script setup lang="ts">
 import { generateZip } from '@renderer/utils/GenerateUtil'
+import { SnackbarModel } from '@renderer/utils/MessageTips'
 import { matchChapter, matchDesc } from '@renderer/utils/TextContentUtil'
 import { Ref, ref } from 'vue'
 const txtFile: Ref<File[]> | Ref<undefined> = ref(undefined)
 const outputDir = ref('F:/')
 const sheet = ref(false)
+const snackbar = ref({ show: false, message: '' } as SnackbarModel)
 const book = ref({
   title: '',
   author: '',
@@ -299,7 +304,7 @@ function chapterEdit() {
   sheet.value = true
 }
 function doConvert() {
-  generateZip(
+  snackbar.value = generateZip(
     book.value.title,
     book.value.author,
     book.value.desc,
