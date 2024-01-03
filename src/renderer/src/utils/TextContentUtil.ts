@@ -11,9 +11,24 @@ export function matchChapter(content: string, matchRule: string) {
   lines.forEach((line, index) => {
     const chapter = line.match(matchRule)
     if (chapter != null) {
+      let title = chapter[2]
+      if (title != undefined) {
+        if (
+          title[0] == ' ' ||
+          title[0] == '、' ||
+          title[0] == '：' ||
+          title[0] == '，' ||
+          title[0] == '；' ||
+          title[0] == ':' ||
+          title[0] == ',' ||
+          title[0] == ';'
+        ) {
+          title = title.substring(1)
+        }
+      }
       chapters.push({
-        text: chapter[0] + ' #' + index,
-        title: chapter[0],
+        text: chapter[1] + ' ' + title + ' #' + index,
+        title: chapter[1] + ' ' + title,
         index
       } as TocModel)
     }
