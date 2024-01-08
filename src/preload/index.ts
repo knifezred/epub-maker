@@ -4,6 +4,11 @@ import fs from 'fs'
 import path from 'path'
 import AdmZip from 'adm-zip'
 
+export interface ZipFile {
+  fileName: string
+  fileContent: string
+  encode: BufferEncoding
+}
 // Custom APIs for renderer
 const api = {
   getAbsolutePath: (target: string) => {

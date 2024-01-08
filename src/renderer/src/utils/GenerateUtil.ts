@@ -1,4 +1,4 @@
-import { TocModel } from '@renderer/models/entity'
+import { TocModel, ZipFile } from '@renderer/models/entity'
 import { SnackbarModel } from './MessageTips'
 export function generateZip(
   bookName: string,

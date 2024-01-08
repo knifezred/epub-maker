@@ -36,15 +36,6 @@ export const RootRoute: AppRouteRecordRaw = {
   ]
 }
 
-export const LoginRoute: AppRouteRecordRaw = {
-  path: '/login',
-  name: 'Login',
-  component: () => import('@renderer/views/Login.vue'),
-  meta: {
-    title: 'login'
-  }
-}
-
 // Basic routing without permission
 // 未经许可的基本路由
-export const basicRoutes = [LoginRoute, RootRoute, PAGE_NOT_FOUND_ROUTE]
+export const basicRoutes = [RootRoute, PAGE_NOT_FOUND_ROUTE]

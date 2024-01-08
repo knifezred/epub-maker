@@ -3,3 +3,9 @@ export interface TocModel {
   index: number
   text: string
 }
+
+export interface ZipFile {
+  fileName: string
+  fileContent: string
+  encode: BufferEncoding
+}

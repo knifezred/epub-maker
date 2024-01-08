@@ -11,7 +11,8 @@
 }
 
 .toc {
-  padding: 10px;
+  padding: 10px !important;
+  text-indent: 2em;
 }
 
 .toc-l2 {
@@ -20,10 +21,7 @@
 .toc-l2 a {
   text-decoration: none;
 }
-.toc-t,
-.content h2 {
-  margin: 10px;
-}
+
 .toc-t::before,
 .content h2::before {
   content: ' ';

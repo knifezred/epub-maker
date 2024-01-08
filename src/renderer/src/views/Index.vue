@@ -189,6 +189,7 @@
   </v-container>
 </template>
 <script setup lang="ts">
+import { TocModel } from '@renderer/models/entity'
 import { generateZip } from '@renderer/utils/GenerateUtil'
 import { SnackbarModel } from '@renderer/utils/MessageTips'
 import { matchChapter, matchDesc } from '@renderer/utils/TextContentUtil'
@@ -222,7 +223,7 @@ function changeRegex() {
 const tab = ref(null)
 let matchRule = setting.value.chapterRegexMode
 let txtContent = ''
-let chapters: Array<ZipFile> = []
+let chapters: Array<TocModel> = []
 function loadFile() {
   if (txtFile.value != undefined && txtFile.value[0] != undefined) {
     const fileName = txtFile.value[0].name

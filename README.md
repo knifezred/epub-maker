@@ -1,4 +1,4 @@
-# fridayboot-electron
+# epub-maker
 
 TXT转EPUB电子书的工具
 
