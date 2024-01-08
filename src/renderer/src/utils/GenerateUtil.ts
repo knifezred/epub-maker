@@ -78,7 +78,8 @@ export function generateZip(
         '.html" />' +
         '</navPoint>'
       // book-toc.html
-      bookToc += '<dt class="tocl2"><a href="chapter' + index + '.html">' + item.title + '</a></dt>'
+      bookToc +=
+        '<dt class="toc-l2"><a href="chapter' + index + '.html">' + item.title + '</a></dt>'
       // content.opf
       contentManifest +=
         '<item id="chapter' +
@@ -97,12 +98,12 @@ export function generateZip(
       if (index == toc.length - 1) {
         for (let p = item.index; p < textArray.length - 1; p++) {
           const element = textArray[p + 1]
-          chapterContent += '<p>' + element + '</p>'
+          chapterContent += '<p>' + element.trimStart() + '</p>'
         }
       } else {
         for (let p = item.index; p < toc[index + 1].index - 1; p++) {
           const element = textArray[p + 1]
-          chapterContent += '<p>' + element + '</p>'
+          chapterContent += '<p>' + element.trimStart() + '</p>'
         }
       }
       chapterHtml = chapterHtml.replace('$title$', item.title)
