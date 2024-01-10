@@ -7,7 +7,11 @@ export function TransformChapterDelimiter(chapter: string) {
 }
 
 export function isChineseChar(char) {
-  // 判断是否位于基本汉字区或扩展A区
-  const unicode = char.charCodeAt(0)
-  return (unicode >= 0x4e00 && unicode <= 0x9fff) || (unicode >= 0x3400 && unicode <= 0x4dbf)
+  if (char == undefined) {
+    return true
+  } else {
+    // 判断是否位于基本汉字区或扩展A区
+    const unicode = char.charCodeAt(0)
+    return (unicode >= 0x4e00 && unicode <= 0x9fff) || (unicode >= 0x3400 && unicode <= 0x4dbf)
+  }
 }
