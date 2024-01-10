@@ -157,7 +157,7 @@ export function generateZip(
       encode: 'utf8'
     })
     // 保存文件到磁盘
-    window.api.createZip(zipFiles, outPut + '/' + bookName + '-' + author + '.epub')
+    window.api.createZip(zipFiles, outPut + '/《' + bookName + '》作者：' + author + '.epub')
   } catch (error) {
     return { show: true, message: error } as SnackbarModel
   }
