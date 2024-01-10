@@ -56,7 +56,9 @@ export function matchDesc(content: string, chapters: Array<TocModel>, fileName: 
   if (remark.indexOf('】') > -1) {
     remark = remark.split('】')[1]
   }
-  desc = remark + ' ' + desc
+  if (remark != '') {
+    desc = remark + ' ' + desc
+  }
   return desc
 }
 

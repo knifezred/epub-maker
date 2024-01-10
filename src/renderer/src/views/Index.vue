@@ -233,7 +233,7 @@ const setting = ref({
   chapterRegex: true,
   chapterRegexMode: '^\\s*([第卷][0123456789一二三四五六七八九十零〇百千万两]*[章卷回节集部])(.*)',
   chapterExtend: false,
-  chapterExtendMode: '^\\s*(简介|序言|序[1-9]|序曲|简介|后记|尾声)',
+  chapterExtendMode: '^\\s*(简介|序言|序[1-9]|序曲|后记|尾声)$',
   cssType: 'skip',
   customStyle: ''
 })
