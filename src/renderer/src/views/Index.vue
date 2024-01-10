@@ -254,7 +254,11 @@ function loadFile() {
     const fileName = txtFile.value[0].name
     txtFile.value[0].text().then((res) => {
       txtContent = res
-      chapters = matchChapter(txtContent, matchRule)
+      chapters = matchChapter(
+        txtContent,
+        matchRule,
+        setting.value.chapterExtend ? setting.value.chapterExtendMode : ''
+      )
       book.value.title = matchTitle(fileName)
       book.value.author = matchAuthor(fileName)
       if (txtContent.indexOf('简介') > -1) {
@@ -310,8 +314,11 @@ function chapterEdit() {
     } else {
       matchRule = setting.value.chapterRegexMode
     }
-    const matchExtendRule = setting.value.chapterExtend ? setting.value.chapterExtendMode : ''
-    chapters = matchChapter(txtContent, matchRule, matchExtendRule)
+    chapters = matchChapter(
+      txtContent,
+      matchRule,
+      setting.value.chapterExtend ? setting.value.chapterExtendMode : ''
+    )
     sheet.value = true
   }
 }
