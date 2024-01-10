@@ -11,7 +11,7 @@ export function matchChapter(content: string, matchRule: string, matchExtendRule
   })
   lines.forEach((line, index) => {
     let chapter = line.match(matchRule)
-    if (chapter == null) {
+    if (chapter == null && matchExtendRule != '') {
       chapter = line.match(matchExtendRule)
     }
     if (chapter != null) {
