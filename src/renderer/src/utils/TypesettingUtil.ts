@@ -9,8 +9,5 @@ export function TransformChapterDelimiter(chapter: string) {
 export function isChineseChar(char) {
   // 判断是否位于基本汉字区或扩展A区
   const unicode = char.charCodeAt(0)
-  return (
-    (unicode >= 0x4e00 && unicode <= 0x9fff) || // 基本汉字区
-    (unicode >= 0x3400 && unicode <= 0x4dbf)
-  ) // 扩展A区
+  return (unicode >= 0x4e00 && unicode <= 0x9fff) || (unicode >= 0x3400 && unicode <= 0x4dbf)
 }

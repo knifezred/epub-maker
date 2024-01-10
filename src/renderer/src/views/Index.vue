@@ -13,13 +13,7 @@
                 :src="book.cover.length > 0 ? book.cover[0].path : '/imgs/t1.webp'"
               ></v-img>
             </v-col>
-            <v-col :cols="4">
-              <v-card>
-                <v-text-field v-model="book.title" label="书名"></v-text-field>
-                <v-text-field v-model="book.author" label="作者"></v-text-field>
-                <v-textarea v-model="book.desc" label="简介"></v-textarea>
-              </v-card>
-            </v-col>
+
             <v-col :cols="5">
               <v-file-input
                 v-model="txtFile"
@@ -28,39 +22,71 @@
                 prepend-icon="mdi-file-document-outline"
                 @update:model-value="loadFile"
               ></v-file-input>
-              <v-text-field
-                v-model="outputDir"
-                label="生成目录"
-                prepend-icon="mdi-folder-outline"
-              ></v-text-field>
+
               <v-file-input
                 v-model="book.cover"
                 accept="image/*"
                 label="封面"
                 prepend-icon="mdi-camera"
               ></v-file-input>
+
+              <v-text-field
+                v-model="setting.outputDir"
+                label="生成目录"
+                prepend-icon="mdi-folder-outline"
+              ></v-text-field>
+
               <v-btn
                 class="text-none mb-4 mr-4"
-                color="blue-darken-2"
-                size="x-large"
+                color="deep-purple-darken-2"
+                variant="flat"
+                @click="chapterEdit"
+              >
+                章节编辑
+              </v-btn>
+
+              <v-btn
+                class="text-none mb-4 mr-4"
+                color="pink-darken-2"
                 variant="flat"
                 @click="doConvert"
               >
                 开始转换
               </v-btn>
+
+              <v-btn
+                class="text-none mb-4 mr-5"
+                color="deep-purple-darken-2"
+                variant="flat"
+                @click="saveConfig"
+              >
+                保存设置
+              </v-btn>
+            </v-col>
+            <v-col :cols="4">
+              <v-card>
+                <v-text-field v-model="book.title" label="书名"></v-text-field>
+
+                <v-text-field v-model="book.author" label="作者"></v-text-field>
+
+                <v-textarea v-model="book.desc" label="简介"></v-textarea>
+              </v-card>
             </v-col>
           </v-row>
         </v-card>
       </v-col>
     </v-row>
+
     <v-row no-gutters class="mt-8">
       <v-col>
         <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
           <v-tab :value="1">章节</v-tab>
-          <v-tab :value="2">版式</v-tab>
+
           <v-tab :value="3">书籍信息</v-tab>
+
           <v-tab :value="4">定制样式</v-tab>
         </v-tabs>
+
         <v-window v-model="tab">
           <v-window-item :value="1">
             <v-container fluid>
@@ -74,18 +100,21 @@
                       @update:model-value="changeEasy"
                     ></v-switch>
                   </v-col>
+
                   <v-col>
                     <v-select
                       v-model="setting.chapterEasy1"
                       :items="['第', '卷', '第卷']"
                     ></v-select>
                   </v-col>
+
                   <v-col>
                     <v-select
                       v-model="setting.chapterEasy2"
                       :items="['混合型数字', '纯中文数字', '阿拉伯数字']"
                     ></v-select>
                   </v-col>
+
                   <v-col>
                     <v-select
                       v-model="setting.chapterEasy3"
@@ -93,6 +122,7 @@
                     ></v-select>
                   </v-col>
                 </v-row>
+
                 <v-row>
                   <v-col :cols="2"
                     ><v-switch
@@ -102,6 +132,7 @@
                       @update:model-value="changeRegex"
                     ></v-switch
                   ></v-col>
+
                   <v-col>
                     <v-text-field
                       v-model="setting.chapterRegexMode"
@@ -109,34 +140,24 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
+
                 <v-row>
-                  <v-col></v-col>
-                  <v-col></v-col>
+                  <v-col :cols="2">
+                    <v-switch v-model="setting.chapterExtend" label="附加规则" class="ml-2">
+                    </v-switch>
+                  </v-col>
+
                   <v-col>
-                    <v-btn class="text-none mb-4 mr-5" color="grey-darken-3" variant="flat">
-                      保存
-                    </v-btn>
-                    <v-btn
-                      class="text-none mb-4"
-                      color="indigo-darken-2"
-                      variant="flat"
-                      @click="chapterEdit"
-                    >
-                      章节编辑
-                    </v-btn>
+                    <v-text-field
+                      v-model="setting.chapterExtendMode"
+                      label="正则表达式"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
             </v-container>
           </v-window-item>
-          <v-window-item :value="2">
-            <v-container fluid>
-              <v-card>
-                <v-text-field v-model="book.title" label="书名"></v-text-field>
-                <v-text-field v-model="book.author" label="作者"></v-text-field>
-              </v-card>
-            </v-container>
-          </v-window-item>
+
           <v-window-item :value="3">
             <v-container fluid>
               <v-card>
@@ -159,16 +180,16 @@
               </v-card>
             </v-container>
           </v-window-item>
+
           <v-window-item :value="4">
             <v-container fluid>
               <v-card>
-                <v-textarea label="css"></v-textarea>
+                <v-textarea v-model="setting.customStyle" label="css"></v-textarea>
                 <v-radio-group v-model="setting.cssType" inline>
-                  <v-radio label="略过" value="css1"></v-radio>
-                  <v-radio label="追加" value="css2"></v-radio>
-                  <v-radio label="覆盖" value="css3"></v-radio>
+                  <v-radio label="略过" value="skip"></v-radio>
+                  <v-radio label="追加" value="append"></v-radio>
+                  <v-radio label="覆盖" value="cover"></v-radio>
                 </v-radio-group>
-                <v-checkbox v-model="setting.autoSaveCss" label="自动保存CSS"></v-checkbox>
               </v-card>
             </v-container>
           </v-window-item>
@@ -192,10 +213,9 @@
 import { TocModel } from '@renderer/models/entity'
 import { generateZip } from '@renderer/utils/GenerateUtil'
 import { SnackbarModel } from '@renderer/utils/MessageTips'
-import { matchChapter, matchDesc } from '@renderer/utils/TextContentUtil'
+import { matchAuthor, matchChapter, matchDesc, matchTitle } from '@renderer/utils/TextContentUtil'
 import { Ref, ref } from 'vue'
 const txtFile: Ref<File[]> | Ref<undefined> = ref(undefined)
-const outputDir = ref('F:/')
 const sheet = ref(false)
 const snackbar = ref({ show: false, message: '' } as SnackbarModel)
 const book = ref({
@@ -205,15 +225,20 @@ const book = ref({
   desc: ''
 })
 const setting = ref({
-  autoSaveCss: true,
-  cssType: 'css1',
+  outputDir: 'F:/',
   chapterEasy: false,
   chapterEasy1: '第',
   chapterEasy2: '混合型数字',
   chapterEasy3: '章',
   chapterRegex: true,
-  chapterRegexMode: '^\\s*([第卷][0123456789一二三四五六七八九十零〇百千万两]*[章卷回节集部])(.*)'
+  chapterRegexMode: '^\\s*([第卷][0123456789一二三四五六七八九十零〇百千万两]*[章卷回节集部])(.*)',
+  chapterExtend: false,
+  chapterExtendMode: '^\\s*(简介|序言|序[1-9]|序曲|简介|后记|尾声)',
+  cssType: 'skip',
+  customStyle: ''
 })
+// 加载配置
+loadConfig()
 function changeEasy() {
   setting.value.chapterRegex = !setting.value.chapterEasy
 }
@@ -230,33 +255,12 @@ function loadFile() {
     txtFile.value[0].text().then((res) => {
       txtContent = res
       chapters = matchChapter(txtContent, matchRule)
+      book.value.title = matchTitle(fileName)
+      book.value.author = matchAuthor(fileName)
       if (txtContent.indexOf('简介') > -1) {
-        book.value.desc = matchDesc(txtContent)
+        book.value.desc = matchDesc(txtContent, chapters, fileName)
       }
     })
-    let bookTitle = fileName
-    if (fileName.indexOf('作者') > -1) {
-      book.value.author = fileName
-        .split('作者')[1]
-        .split(' ')[0]
-        .replace(':', '')
-        .replace('：', '')
-        .replace('.txt', '')
-      bookTitle = fileName.split('作者')[0]
-    }
-    if (fileName.indexOf('《') > -1) {
-      bookTitle = fileName.split('《')[1].split('》')[0]
-    }
-    if (fileName.indexOf('【') > -1) {
-      bookTitle = fileName.split('【')[1].split('】')[0]
-    }
-    if (fileName.indexOf('[') > -1) {
-      bookTitle = fileName.split('[')[1].split(']')[0]
-    }
-    bookTitle = bookTitle.replace('.txt', '')
-    book.value.title = bookTitle
-
-    console.log('info' + txtFile.value)
   } else {
     book.value = {
       title: '',
@@ -268,42 +272,50 @@ function loadFile() {
 }
 
 function chapterEdit() {
-  if (setting.value.chapterEasy) {
-    matchRule =
-      '^\\s*([' +
-      setting.value.chapterEasy1 +
-      '][0123456789一二三四五六七八九零十〇百千万两]*[' +
-      setting.value.chapterEasy3 +
-      '])(.*)'
-    if (setting.value.chapterEasy2 == '混合型数字') {
+  if (txtContent == '') {
+    snackbar.value = { show: true, message: '请先选择文件' } as SnackbarModel
+  } else {
+    if (setting.value.chapterEasy) {
       matchRule =
         '^\\s*([' +
         setting.value.chapterEasy1 +
         '][0123456789一二三四五六七八九零十〇百千万两]*[' +
         setting.value.chapterEasy3 +
         '])(.*)'
-    } else if (setting.value.chapterEasy2 == '纯中文数字') {
-      matchRule =
-        '^\\s*([' +
-        setting.value.chapterEasy1 +
-        '][一二三四五六七八九零十〇百千万两]*[' +
-        setting.value.chapterEasy3 +
-        '])(.*)'
+
+      if (setting.value.chapterEasy2 == '混合型数字') {
+        matchRule =
+          '^\\s*([' +
+          setting.value.chapterEasy1 +
+          '][0123456789一二三四五六七八九零十〇百千万两]*[' +
+          setting.value.chapterEasy3 +
+          '])(.*)'
+      } else if (setting.value.chapterEasy2 == '纯中文数字') {
+        matchRule =
+          '^\\s*([' +
+          setting.value.chapterEasy1 +
+          '][一二三四五六七八九零十〇百千万两]*[' +
+          setting.value.chapterEasy3 +
+          '])(.*)'
+      } else {
+        matchRule =
+          '^\\s*([' +
+          setting.value.chapterEasy1 +
+          '][0123456789]*[' +
+          setting.value.chapterEasy3 +
+          '])(.*)'
+      }
+
+      // + setting.value.chapterEasy2 + setting.value.chapterEasy3
     } else {
-      matchRule =
-        '^\\s*([' +
-        setting.value.chapterEasy1 +
-        '][0123456789]*[' +
-        setting.value.chapterEasy3 +
-        '])(.*)'
+      matchRule = setting.value.chapterRegexMode
     }
-    // + setting.value.chapterEasy2 + setting.value.chapterEasy3
-  } else {
-    matchRule = setting.value.chapterRegexMode
+    const matchExtendRule = setting.value.chapterExtend ? setting.value.chapterExtendMode : ''
+    chapters = matchChapter(txtContent, matchRule, matchExtendRule)
+    sheet.value = true
   }
-  chapters = matchChapter(txtContent, matchRule)
-  sheet.value = true
 }
+
 function doConvert() {
   snackbar.value = generateZip(
     book.value.title,
@@ -312,7 +324,18 @@ function doConvert() {
     book.value.cover[0].path,
     chapters,
     txtContent,
-    outputDir.value
+    setting.value.outputDir
   )
+}
+function loadConfig() {
+  const localSetting = localStorage.getItem('setting')
+  if (localSetting != null) {
+    setting.value = JSON.parse(localSetting)
+  }
+}
+function saveConfig() {
+  const json = JSON.stringify(setting.value)
+  localStorage.setItem('setting', json)
+  snackbar.value = { show: true, message: '保存成功' } as SnackbarModel
 }
 </script>
