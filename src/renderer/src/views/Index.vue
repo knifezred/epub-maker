@@ -69,7 +69,7 @@
 
                 <v-text-field v-model="book.author" label="作者"></v-text-field>
 
-                <v-textarea v-model="book.desc" label="简介"></v-textarea>
+                <v-textarea v-model="book.desc" label="简介" style="height: 124px"></v-textarea>
               </v-card>
             </v-col>
           </v-row>
