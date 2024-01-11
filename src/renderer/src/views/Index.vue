@@ -261,9 +261,7 @@ function loadFile() {
       )
       book.value.title = matchTitle(fileName)
       book.value.author = matchAuthor(fileName)
-      if (txtContent.indexOf('简介') > -1) {
-        book.value.desc = matchDesc(txtContent, chapters, fileName)
-      }
+      book.value.desc = matchDesc(txtContent, chapters, fileName)
     })
   } else {
     book.value = {

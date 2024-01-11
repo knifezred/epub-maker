@@ -47,8 +47,14 @@ export function matchDesc(content: string, chapters: Array<TocModel>, fileName: 
   }
   // 没有简介取第一章前3行
   if (desc == '') {
-    desc = lines[chapters[1].index] + lines[chapters[1].index + 1] + lines[chapters[1].index + 2]
+    for (let index = 1; index < 4; index++) {
+      const element = lines[chapters[1].index + index]
+      if (element != undefined) {
+        desc += element
+      }
+    }
   }
+  // 提取文件名信息
   let remark = fileName.split('作者')[0]
   if (remark.indexOf('》') > -1) {
     remark = remark.split('》')[1]
