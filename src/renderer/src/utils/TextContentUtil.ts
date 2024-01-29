@@ -1,4 +1,5 @@
 import { TocModel } from '@renderer/models/entity'
+import jschardet from 'jschardet'
 import { isChineseChar } from './TypesettingUtil'
 
 export function matchChapter(content: string, matchRule: string, matchExtendRule: string) {
@@ -85,4 +86,25 @@ export function matchAuthor(fileName: string) {
     author = fileName.split('作者')[1].split(' ')[0].replace('：', '').replace('.txt', '')
   }
   return author
+}
+
+export function readContent(file: File) {
+  return new Promise<string>((resolve) => {
+    const reader = new FileReader()
+    reader.onload = function (evt) {
+      resolve(evt.target?.result as string)
+    }
+    getEncode(file).then((res) => {
+      reader.readAsText(file, res)
+    })
+  })
+}
+
+async function getEncode(file: File) {
+  const buffers = await window.api.readFileSync(file.path, 'binary')
+  try {
+    return jschardet.detect(buffers, { minimumThreshold: 0 }).encoding
+  } catch (error) {
+    return 'GB2312'
+  }
 }

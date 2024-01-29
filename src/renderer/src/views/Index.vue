@@ -5,61 +5,27 @@
         <v-card elevation="1">
           <v-row>
             <v-col :cols="3">
-              <v-img
-                :width="225"
-                :height="300"
-                aspect-ratio="1"
-                cover
-                :src="book.cover.length > 0 ? book.cover[0].path : '/imgs/t1.webp'"
-              ></v-img>
+              <v-img :width="225" :height="300" aspect-ratio="1" cover
+                :src="book.cover.length > 0 ? book.cover[0].path : '/imgs/t1.webp'"></v-img>
             </v-col>
 
             <v-col :cols="5">
-              <v-file-input
-                v-model="txtFile"
-                accept=".txt"
-                label="txt文件"
-                prepend-icon="mdi-file-document-outline"
-                @update:model-value="loadFile"
-              ></v-file-input>
+              <v-file-input v-model="txtFile" accept=".txt" label="txt文件" prepend-icon="mdi-file-document-outline"
+                @update:model-value="loadFile"></v-file-input>
 
-              <v-file-input
-                v-model="book.cover"
-                accept="image/*"
-                label="封面"
-                prepend-icon="mdi-camera"
-              ></v-file-input>
+              <v-file-input v-model="book.cover" accept="image/*" label="封面" prepend-icon="mdi-camera"></v-file-input>
 
-              <v-text-field
-                v-model="setting.outputDir"
-                label="生成目录"
-                prepend-icon="mdi-folder-outline"
-              ></v-text-field>
+              <v-text-field v-model="setting.outputDir" label="生成目录" prepend-icon="mdi-folder-outline"></v-text-field>
 
-              <v-btn
-                class="text-none mb-4 mr-4"
-                color="deep-purple-darken-2"
-                variant="flat"
-                @click="chapterEdit"
-              >
+              <v-btn class="text-none mb-4 mr-4" color="deep-purple-darken-2" variant="flat" @click="chapterEdit">
                 章节编辑
               </v-btn>
 
-              <v-btn
-                class="text-none mb-4 mr-4"
-                color="pink-darken-2"
-                variant="flat"
-                @click="doConvert"
-              >
+              <v-btn class="text-none mb-4 mr-4" color="pink-darken-2" variant="flat" @click="doConvert">
                 开始转换
               </v-btn>
 
-              <v-btn
-                class="text-none mb-4 mr-5"
-                color="deep-purple-darken-2"
-                variant="flat"
-                @click="saveConfig"
-              >
+              <v-btn class="text-none mb-4 mr-5" color="deep-purple-darken-2" variant="flat" @click="saveConfig">
                 保存设置
               </v-btn>
             </v-col>
@@ -93,51 +59,29 @@
               <v-card>
                 <v-row>
                   <v-col :cols="2">
-                    <v-switch
-                      v-model="setting.chapterEasy"
-                      label="简易规则"
-                      class="ml-2"
-                      @update:model-value="changeEasy"
-                    ></v-switch>
+                    <v-switch v-model="setting.chapterEasy" label="简易规则" class="ml-2"
+                      @update:model-value="changeEasy"></v-switch>
                   </v-col>
 
                   <v-col>
-                    <v-select
-                      v-model="setting.chapterEasy1"
-                      :items="['第', '卷', '第卷']"
-                    ></v-select>
+                    <v-select v-model="setting.chapterEasy1" :items="['第', '卷', '第卷']"></v-select>
                   </v-col>
 
                   <v-col>
-                    <v-select
-                      v-model="setting.chapterEasy2"
-                      :items="['混合型数字', '纯中文数字', '阿拉伯数字']"
-                    ></v-select>
+                    <v-select v-model="setting.chapterEasy2" :items="['混合型数字', '纯中文数字', '阿拉伯数字']"></v-select>
                   </v-col>
 
                   <v-col>
-                    <v-select
-                      v-model="setting.chapterEasy3"
-                      :items="['章', '卷', '回', '节', '集', '部', '章卷回节集部']"
-                    ></v-select>
+                    <v-select v-model="setting.chapterEasy3" :items="['章', '卷', '回', '节', '集', '部', '章卷回节集部']"></v-select>
                   </v-col>
                 </v-row>
 
                 <v-row>
-                  <v-col :cols="2"
-                    ><v-switch
-                      v-model="setting.chapterRegex"
-                      label="正则匹配"
-                      class="ml-2"
-                      @update:model-value="changeRegex"
-                    ></v-switch
-                  ></v-col>
+                  <v-col :cols="2"><v-switch v-model="setting.chapterRegex" label="正则匹配" class="ml-2"
+                      @update:model-value="changeRegex"></v-switch></v-col>
 
                   <v-col>
-                    <v-text-field
-                      v-model="setting.chapterRegexMode"
-                      label="正则表达式"
-                    ></v-text-field>
+                    <v-text-field v-model="setting.chapterRegexMode" label="正则表达式"></v-text-field>
                   </v-col>
                 </v-row>
 
@@ -148,10 +92,7 @@
                   </v-col>
 
                   <v-col>
-                    <v-text-field
-                      v-model="setting.chapterExtendMode"
-                      label="正则表达式"
-                    ></v-text-field>
+                    <v-text-field v-model="setting.chapterExtendMode" label="正则表达式"></v-text-field>
                   </v-col>
                 </v-row>
               </v-card>
@@ -213,7 +154,13 @@
 import { TocModel } from '@renderer/models/entity'
 import { generateZip } from '@renderer/utils/GenerateUtil'
 import { SnackbarModel } from '@renderer/utils/MessageTips'
-import { matchAuthor, matchChapter, matchDesc, matchTitle } from '@renderer/utils/TextContentUtil'
+import {
+  matchAuthor,
+  matchChapter,
+  matchDesc,
+  matchTitle,
+  readContent
+} from '@renderer/utils/TextContentUtil'
 import { Ref, ref } from 'vue'
 const txtFile: Ref<File[]> | Ref<undefined> = ref(undefined)
 const sheet = ref(false)
@@ -252,7 +199,7 @@ let chapters: Array<TocModel> = []
 function loadFile() {
   if (txtFile.value != undefined && txtFile.value[0] != undefined) {
     const fileName = txtFile.value[0].name
-    txtFile.value[0].text().then((res) => {
+    readContent(txtFile.value[0]).then((res) => {
       txtContent = res
       chapters = matchChapter(
         txtContent,
