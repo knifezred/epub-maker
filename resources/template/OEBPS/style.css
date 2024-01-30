@@ -10,7 +10,7 @@
   text-align: center;
   font-size: 2rem !important;
   text-indent: 0em !important;
-  margin: -280px 0px;
+  margin: 10px 0px;
 }
 .toc-l2 {
   margin: 4px 0px;
@@ -21,8 +21,9 @@
   text-decoration: none;
 }
 .t-h2 {
-  font-size: 1.5rem !important;
-  margin-top: 4px;
+  font-size: 1.8rem !important;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem !important;
 }
 .t-h2::before {
   content: ' ';
@@ -31,7 +32,8 @@
   opacity: 1;
   pointer-events: none;
   border-radius: 15px;
-  width: 10px;
+  width: 15px;
   vertical-align: middle;
   margin-right: 5px;
+  height: 15px;
 }
