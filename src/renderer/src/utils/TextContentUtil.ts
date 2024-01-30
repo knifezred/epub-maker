@@ -63,7 +63,7 @@ export function matchDesc(content: string, chapters: Array<TocModel>, fileName: 
   if (remark.indexOf('】') > -1) {
     remark = remark.split('】')[1]
   }
-  if (remark != '') {
+  if (remark != '' && remark != fileName) {
     desc = remark + ' ' + desc
   }
   return desc
@@ -81,7 +81,7 @@ export function matchTitle(fileName: string) {
 }
 
 export function matchAuthor(fileName: string) {
-  let author = ''
+  let author = '不详'
   if (fileName.indexOf('作者') > -1) {
     author = fileName.split('作者')[1].split(' ')[0].replace('：', '').replace('.txt', '')
   }

@@ -13,16 +13,17 @@
   </metadata>
   <manifest>
     <item id="ncxtoc" href="toc.ncx" media-type="application/x-dtbncx+xml" />
-    <item id="htmltoc"
-      href="book-toc.html" media-type="application/xhtml+xml" />
-    <item id="css" href="style.css"
-      media-type="text/css" />
+    <item id="htmltoc" href="book-toc.html" media-type="application/xhtml+xml" />
+    <item id="css" href="style.css" media-type="text/css" />
     <item id="cover-image" href="cover.jpg" media-type="image/jpeg" />
-    <item
-      id="cover" href="cover.html" media-type="application/xhtml+xml" /> $manifest$ </manifest>
+    <item id="cover" href="cover.html" media-type="application/xhtml+xml" />
+    $manifest$
+  </manifest>
   <spine toc="ncxtoc">
     <itemref idref="cover" linear="no" />
-    <itemref idref="htmltoc" linear="yes" /> $spine$ </spine>
+    <itemref idref="htmltoc" linear="yes" />
+    $spine$
+  </spine>
   <guide>
     <reference href="cover.html" type="cover" title="Cover" />
     <reference href="book-toc.html" type="toc" title="Table Of Contents" />

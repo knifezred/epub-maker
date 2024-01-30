@@ -95,15 +95,24 @@ export function generateZip(
       )
 
       let chapterContent = ''
+      let lastP = '上一行'
       if (index == toc.length - 1) {
         for (let p = item.index; p < textArray.length - 1; p++) {
           const element = textArray[p + 1]
-          chapterContent += '<p>' + element.trimStart() + '</p>'
+          // 当前行不为空或上一行不为空，连续空行制保留一个
+          if (element.trimStart() != '' || lastP != '') {
+            chapterContent += '<p>' + element.trimStart() + '</p>'
+          }
+          lastP = element.trimStart()
         }
       } else {
+        lastP = '上一行'
         for (let p = item.index; p < toc[index + 1].index - 1; p++) {
           const element = textArray[p + 1]
-          chapterContent += '<p>' + element.trimStart() + '</p>'
+          if (element.trimStart() != '' || lastP != '') {
+            chapterContent += '<p>' + element.trimStart() + '</p>'
+          }
+          lastP = element.trimStart()
         }
       }
       chapterHtml = chapterHtml.replace('$title$', item.title)
