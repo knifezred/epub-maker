@@ -207,7 +207,7 @@ function loadFile() {
         setting.value.chapterExtend ? setting.value.chapterExtendMode : ''
       )
       book.value.title = matchTitle(fileName)
-      book.value.author = matchAuthor(fileName)
+      book.value.author = matchAuthor(txtContent, chapters, fileName)
       book.value.desc = matchDesc(txtContent, chapters, fileName)
     })
   } else {

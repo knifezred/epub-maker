@@ -99,14 +99,24 @@ export function matchTitle(fileName: string) {
   return bookTitle
 }
 
-export function matchAuthor(fileName: string) {
+export function matchAuthor(content: string, chapters: Array<TocModel>, fileName: string) {
   if (fileName.endsWith('.txt')) {
     fileName = fileName.substring(0, fileName.length - 4)
   }
   let author = '不详'
   if (fileName.indexOf('作者') > -1) {
     author = fileName.split('作者')[1].split(' ')[0].replace('：', '')
+  } else if (chapters.length > 2) {
+    const lines = content.split('\n')
+    for (let index = 1; index < chapters[1].index; index++) {
+      const element = lines[index]
+      if (element.trim().startsWith('作者：')) {
+        author = element.substring(3).trim()
+        break
+      }
+    }
   }
+
   return author
 }
 
