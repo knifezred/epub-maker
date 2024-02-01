@@ -6,7 +6,7 @@
           <v-row>
             <v-col :cols="3">
               <v-img :width="225" :height="300" aspect-ratio="1" cover
-                :src="book.cover.length > 0 ? book.cover[0].path : '/imgs/t1.webp'"></v-img>
+                :src="book.cover.length > 0 ? book.cover[0].path : coverIcon"></v-img>
             </v-col>
 
             <v-col :cols="5">
@@ -162,6 +162,7 @@ import {
   readContent
 } from '@renderer/utils/TextContentUtil'
 import { Ref, ref } from 'vue'
+import coverIcon from '../../../../resources/icon.png'
 const txtFile: Ref<File[]> | Ref<undefined> = ref(undefined)
 const sheet = ref(false)
 const snackbar = ref({ show: false, message: '' } as SnackbarModel)

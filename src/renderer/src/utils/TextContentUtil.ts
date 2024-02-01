@@ -1,7 +1,6 @@
 import { TocModel } from '@renderer/models/entity'
 import jschardet from 'jschardet'
 import { isChineseChar } from './TypesettingUtil'
-
 export function matchChapter(content: string, matchRule: string, matchExtendRule: string) {
   const lines = content.split('\n')
   const chapters: TocModel[] = []
@@ -20,15 +19,13 @@ export function matchChapter(content: string, matchRule: string, matchExtendRule
       if (title != undefined) {
         title = title.trim()
         // 替换开头
-        if (!isChineseChar(title[0])) {
-          if (!title.endsWith(title.substring(0, 1))) {
-            title = title.substring(1)
+        if (!isChineseChar(title[0]) && !'(（'.includes(title[0])) {
+          title = title.substring(1)
+          // 替换结尾
+          const titleEnd = title.substring(title.length - 1)
+          if (!isChineseChar(titleEnd) && !'?？!！)）'.includes(titleEnd)) {
+            title = title.substring(0, title.length - 1)
           }
-        }
-        // 替换结尾
-        const titleEnd = title.substring(title.length - 1)
-        if (!isChineseChar(titleEnd) && !'?？!！'.includes(titleEnd)) {
-          title = title.substring(0, title.length - 1)
         }
       }
 
