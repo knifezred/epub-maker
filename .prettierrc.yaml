@@ -6,6 +6,6 @@ useTabs: false
 bracketSpacing: true
 endOfLine: auto
 eslintIntegration: false
-jsxBracketSameLine: false
+jsxBracketSameLine: true
 trailingComma: none
 tslintIntegration: false

@@ -5,37 +5,64 @@
         <v-card elevation="1">
           <v-row>
             <v-col :cols="3">
-              <v-img :width="225" :height="300" aspect-ratio="1" cover
-                :src="book.cover.length > 0 ? book.cover[0].path : coverIcon"></v-img>
+              <v-img
+                :width="225"
+                :height="300"
+                aspect-ratio="1"
+                cover
+                :src="book.cover.length > 0 ? book.cover[0].path : coverIcon" />
             </v-col>
 
             <v-col :cols="5">
-              <v-file-input v-model="txtFile" accept=".txt" label="txt文件" prepend-icon="mdi-file-document-outline"
-                @update:model-value="loadFile"></v-file-input>
+              <v-file-input
+                v-model="txtFile"
+                accept=".txt"
+                label="txt文件"
+                prepend-icon="mdi-file-document-outline"
+                @update:model-value="loadFile" />
 
-              <v-file-input v-model="book.cover" accept="image/*" label="封面" prepend-icon="mdi-camera"></v-file-input>
+              <v-file-input
+                v-model="book.cover"
+                accept="image/*"
+                label="封面"
+                prepend-icon="mdi-camera" />
 
-              <v-text-field v-model="setting.outputDir" label="生成目录" prepend-icon="mdi-folder-outline"></v-text-field>
+              <v-text-field
+                v-model="setting.outputDir"
+                label="生成目录"
+                prepend-icon="mdi-folder-outline" />
 
-              <v-btn class="text-none mb-4 mr-4" color="deep-purple-darken-2" variant="flat" @click="chapterEdit">
+              <v-btn
+                class="text-none mb-4 mr-4"
+                color="deep-purple-darken-2"
+                variant="flat"
+                @click="chapterEdit">
                 章节编辑
               </v-btn>
 
-              <v-btn class="text-none mb-4 mr-4" color="pink-darken-2" variant="flat" @click="doConvert">
+              <v-btn
+                class="text-none mb-4 mr-4"
+                color="pink-darken-2"
+                variant="flat"
+                @click="doConvert">
                 开始转换
               </v-btn>
 
-              <v-btn class="text-none mb-4 mr-5" color="deep-purple-darken-2" variant="flat" @click="saveConfig">
+              <v-btn
+                class="text-none mb-4 mr-5"
+                color="deep-purple-darken-2"
+                variant="flat"
+                @click="saveConfig">
                 保存设置
               </v-btn>
             </v-col>
             <v-col :cols="4">
               <v-card>
-                <v-text-field v-model="book.title" label="书名"></v-text-field>
+                <v-text-field v-model="book.title" label="书名" />
 
-                <v-text-field v-model="book.author" label="作者"></v-text-field>
+                <v-text-field v-model="book.author" label="作者" />
 
-                <v-textarea v-model="book.desc" label="简介" style="height: 124px"></v-textarea>
+                <v-textarea v-model="book.desc" label="简介" style="height: 124px" />
               </v-card>
             </v-col>
           </v-row>
@@ -46,11 +73,13 @@
     <v-row no-gutters class="mt-8">
       <v-col>
         <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
-          <v-tab :value="1">章节</v-tab>
+          <v-tab :value="1"> 章节 </v-tab>
 
-          <v-tab :value="3">书籍信息</v-tab>
+          <v-tab :value="2"> 内容替换 </v-tab>
 
-          <v-tab :value="4">定制样式</v-tab>
+          <v-tab :value="3"> 书籍信息 </v-tab>
+
+          <v-tab :value="4"> 定制样式 </v-tab>
         </v-tabs>
 
         <v-window v-model="tab">
@@ -59,42 +88,70 @@
               <v-card>
                 <v-row>
                   <v-col :cols="2">
-                    <v-switch v-model="setting.chapterEasy" label="简易规则" class="ml-2"
-                      @update:model-value="changeEasy"></v-switch>
+                    <v-switch
+                      v-model="setting.chapterEasy"
+                      label="简易规则"
+                      class="ml-2"
+                      @update:model-value="changeEasy" />
                   </v-col>
 
                   <v-col>
-                    <v-select v-model="setting.chapterEasy1" :items="['第', '卷', '第卷']"></v-select>
+                    <v-select v-model="setting.chapterEasy1" :items="['第', '卷', '第卷']" />
                   </v-col>
 
                   <v-col>
-                    <v-select v-model="setting.chapterEasy2" :items="['混合型数字', '纯中文数字', '阿拉伯数字']"></v-select>
+                    <v-select
+                      v-model="setting.chapterEasy2"
+                      :items="['混合型数字', '纯中文数字', '阿拉伯数字']" />
                   </v-col>
 
                   <v-col>
-                    <v-select v-model="setting.chapterEasy3" :items="['章', '卷', '回', '节', '集', '部', '章卷回节集部']"></v-select>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col :cols="2"><v-switch v-model="setting.chapterRegex" label="正则匹配" class="ml-2"
-                      @update:model-value="changeRegex"></v-switch></v-col>
-
-                  <v-col>
-                    <v-text-field v-model="setting.chapterRegexMode" label="正则表达式"></v-text-field>
+                    <v-select
+                      v-model="setting.chapterEasy3"
+                      :items="['章', '卷', '回', '节', '集', '部', '章卷回节集部']" />
                   </v-col>
                 </v-row>
 
                 <v-row>
                   <v-col :cols="2">
-                    <v-switch v-model="setting.chapterExtend" label="附加规则" class="ml-2">
-                    </v-switch>
+                    <v-switch
+                      v-model="setting.chapterRegex"
+                      label="正则匹配"
+                      class="ml-2"
+                      @update:model-value="changeRegex" />
                   </v-col>
 
                   <v-col>
-                    <v-text-field v-model="setting.chapterExtendMode" label="正则表达式"></v-text-field>
+                    <v-text-field v-model="setting.chapterRegexMode" label="正则表达式" />
                   </v-col>
                 </v-row>
+
+                <v-row>
+                  <v-col :cols="2">
+                    <v-switch v-model="setting.chapterExtend" label="附加规则" class="ml-2" />
+                  </v-col>
+
+                  <v-col>
+                    <v-text-field v-model="setting.chapterExtendMode" label="正则表达式" />
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-container>
+          </v-window-item>
+
+          <v-window-item :value="2">
+            <v-container fluid>
+              <v-card>
+                <v-container fluid>
+                  <v-textarea v-model="setting.contentReplace" label="替换规则" />
+                  <v-btn
+                    class="text-none mb-4 mr-4"
+                    color="deep-purple-darken-2"
+                    variant="flat"
+                    @click="doReplaceTxt">
+                    开始替换
+                  </v-btn>
+                </v-container>
               </v-card>
             </v-container>
           </v-window-item>
@@ -103,19 +160,19 @@
             <v-container fluid>
               <v-card>
                 <v-row>
-                  <v-col> <v-text-field label="译者"></v-text-field></v-col>
-                  <v-col> <v-text-field label="ISBN"></v-text-field></v-col>
+                  <v-col> <v-text-field label="译者" /></v-col>
+                  <v-col> <v-text-field label="ISBN" /></v-col>
                 </v-row>
                 <v-row>
-                  <v-col><v-text-field label="出版社"></v-text-field></v-col>
-                  <v-col><v-text-field label="出版日期"></v-text-field></v-col>
+                  <v-col><v-text-field label="出版社" /></v-col>
+                  <v-col><v-text-field label="出版日期" /></v-col>
                 </v-row>
                 <v-row>
                   <v-col>
-                    <v-text-field label="类别"></v-text-field>
+                    <v-text-field label="类别" />
                   </v-col>
                   <v-col>
-                    <v-select label="语言" :items="['zh-CN', 'zh-TW', 'en-US']"></v-select>
+                    <v-select label="语言" :items="['zh-CN', 'zh-TW', 'en-US']" />
                   </v-col>
                 </v-row>
               </v-card>
@@ -125,11 +182,11 @@
           <v-window-item :value="4">
             <v-container fluid>
               <v-card>
-                <v-textarea v-model="setting.customStyle" label="css"></v-textarea>
+                <v-textarea v-model="setting.customStyle" label="css" />
                 <v-radio-group v-model="setting.cssType" inline>
-                  <v-radio label="略过" value="skip"></v-radio>
-                  <v-radio label="追加" value="append"></v-radio>
-                  <v-radio label="覆盖" value="cover"></v-radio>
+                  <v-radio label="略过" value="skip" />
+                  <v-radio label="追加" value="append" />
+                  <v-radio label="覆盖" value="cover" />
                 </v-radio-group>
               </v-card>
             </v-container>
@@ -141,7 +198,7 @@
       <v-card class="text-center" height="600">
         <v-card-text>
           <v-btn variant="text" @click="sheet = !sheet"> close </v-btn>
-          <v-list :items="chapters" item-title="text" item-value="index" :height="535"></v-list>
+          <v-list :items="chapters" item-title="text" item-value="index" :height="535" />
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
@@ -179,11 +236,13 @@ const setting = ref({
   chapterEasy2: '混合型数字',
   chapterEasy3: '章',
   chapterRegex: true,
-  chapterRegexMode: '^\\s*([第卷][0123456789一二三四五六七八九十零〇百千万两]*[章卷回节集部])(.*)',
+  chapterRegexMode:
+    '^\\s*([第卷\\(（][0123456789一二三四五六七八九十零〇百千万两]*[章卷回节集部）\\)])(.*)',
   chapterExtend: false,
   chapterExtendMode: '^\\s*(简介|序言|序[1-9]|序曲|后记|尾声)$',
   cssType: 'skip',
-  customStyle: ''
+  customStyle: '',
+  contentReplace: ''
 })
 // 加载配置
 loadConfig()
@@ -226,18 +285,12 @@ function chapterEdit() {
     snackbar.value = { show: true, message: '请先选择文件' } as SnackbarModel
   } else {
     if (setting.value.chapterEasy) {
-      matchRule =
-        '^\\s*([' +
-        setting.value.chapterEasy1 +
-        '][0123456789一二三四五六七八九零十〇百千万两]*[' +
-        setting.value.chapterEasy3 +
-        '])(.*)'
-
-      if (setting.value.chapterEasy2 == '混合型数字') {
+      matchRule = ''
+      if (setting.value.chapterEasy2 == '阿拉伯数字') {
         matchRule =
           '^\\s*([' +
           setting.value.chapterEasy1 +
-          '][0123456789一二三四五六七八九零十〇百千万两]*[' +
+          '][0123456789]*[' +
           setting.value.chapterEasy3 +
           '])(.*)'
       } else if (setting.value.chapterEasy2 == '纯中文数字') {
@@ -251,12 +304,10 @@ function chapterEdit() {
         matchRule =
           '^\\s*([' +
           setting.value.chapterEasy1 +
-          '][0123456789]*[' +
+          '][0123456789一二三四五六七八九零十〇百千万两]*[' +
           setting.value.chapterEasy3 +
           '])(.*)'
       }
-
-      // + setting.value.chapterEasy2 + setting.value.chapterEasy3
     } else {
       matchRule = setting.value.chapterRegexMode
     }
@@ -280,12 +331,23 @@ function doConvert() {
     setting.value.outputDir
   )
 }
+
+function doReplaceTxt() {
+  if (setting.value.contentReplace.length == 0) {
+    snackbar.value = { show: true, message: '请填写替换规则' } as SnackbarModel
+  } else {
+    // TODO test
+    snackbar.value = { show: true, message: setting.value.contentReplace } as SnackbarModel
+  }
+}
+
 function loadConfig() {
   const localSetting = localStorage.getItem('setting')
   if (localSetting != null) {
     setting.value = JSON.parse(localSetting)
   }
 }
+
 function saveConfig() {
   const json = JSON.stringify(setting.value)
   localStorage.setItem('setting', json)
