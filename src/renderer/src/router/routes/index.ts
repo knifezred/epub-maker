@@ -1,41 +1,29 @@
-import projectSetting from '@renderer/settings/projectSetting'
-import type { AppRouteRecordRaw, AppRouteModule } from './../types'
+import type { CustomRoute, ElegantConstRoute, ElegantRoute } from '@elegant-router/types'
+import { layouts, views } from '../elegant/imports'
+import { generatedRoutes } from '../elegant/routes'
+import { transformElegantRoutesToVueRoutes } from '../elegant/transform'
 
-import { PAGE_NOT_FOUND_ROUTE } from './basic'
+const customRoutes: CustomRoute[] = []
 
-// import.meta.globEager() 直接引入所有的模块 Vite 独有的功能
-const modules = import.meta.glob('./modules/**/*.ts', { eager: true })
-const routeModuleList: AppRouteModule[] = []
+export function createStaticRoutes() {
+  const constantRoutes: ElegantRoute[] = []
 
-// 加入到路由集合中
-Object.keys(modules).forEach((val) => {
-  const mod = val['Router']
-  const modList = Array.isArray(mod) ? [...mod] : [mod]
-  routeModuleList.push(...modList)
-})
+  const authRoutes: ElegantRoute[] = []
 
-export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList]
-
-// 根路由
-export const RootRoute: AppRouteRecordRaw = {
-  path: '/',
-  name: 'Root',
-  redirect: projectSetting.isAuth ? '/login' : '/index',
-  meta: {
-    title: 'Root'
-  },
-  children: [
-    {
-      path: '/index',
-      name: 'Index',
-      component: () => import('@renderer/views/Index.vue'),
-      meta: {
-        title: 'Index'
-      }
+  ;[...customRoutes, ...generatedRoutes].forEach((item) => {
+    if (item.meta?.constant) {
+      constantRoutes.push(item)
+    } else {
+      authRoutes.push(item)
     }
-  ]
+  })
+
+  return {
+    constantRoutes,
+    authRoutes
+  }
 }
 
-// Basic routing without permission
-// 未经许可的基本路由
-export const basicRoutes = [RootRoute, PAGE_NOT_FOUND_ROUTE]
+export function getAuthVueRoutes(routes: ElegantConstRoute[]) {
+  return transformElegantRoutesToVueRoutes(routes, layouts, views)
+}

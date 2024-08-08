@@ -1,6 +1,4 @@
-export default {
-  database: 'fridaybootIndexedDb',
-  worldTime: new Date('2023/12/08 08:00:00'),
-  darkMode: true,
-  isAuth: false
+export const projectSetting: App.Global.ProjectSetting = {
+  isAuth: false,
+  localhost: 'http://localhost:5175/'
 }

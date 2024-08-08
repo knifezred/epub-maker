@@ -1,14 +1,15 @@
-import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import AdmZip from 'adm-zip'
+import { contextBridge } from 'electron'
 import fs from 'fs'
 import path from 'path'
-import AdmZip from 'adm-zip'
 
 export interface ZipFile {
   fileName: string
   fileContent: string
   encode: BufferEncoding
 }
+
 // Custom APIs for renderer
 const api = {
   getAbsolutePath: (target: string) => {

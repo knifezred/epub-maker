@@ -1,17 +1,15 @@
-import { TocModel, ZipFile } from '@renderer/models/entity'
-import { SnackbarModel } from './MessageTips'
 export function generateZip(
   bookName: string,
   author: string,
   desc: string,
   cover: string,
-  toc: TocModel[],
+  toc: Dto.TocModel[],
   text: string,
   outPut: string
 ) {
   const uid = generateRandomUid(10)
   try {
-    const zipFiles: Array<ZipFile> = []
+    const zipFiles: Array<Dto.ZipFile> = []
     // 创建一个新的ZIP文件
     // 添加文件到ZIP中
     zipFiles.push({
@@ -168,9 +166,9 @@ export function generateZip(
     // 保存文件到磁盘
     window.api.createZip(zipFiles, outPut + '/《' + bookName + '》作者：' + author + '.epub')
   } catch (error) {
-    return { show: true, message: error } as SnackbarModel
+    window.$message?.error(error as never)
   }
-  return { show: true, message: '转换成功' } as SnackbarModel
+  window.$message?.success('转换成功')
 }
 // 生成随机uid
 function generateRandomUid(length) {

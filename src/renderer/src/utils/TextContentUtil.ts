@@ -1,9 +1,8 @@
-import { TocModel } from '@renderer/models/entity'
 import jschardet from 'jschardet'
 import { isChineseChar } from './TypesettingUtil'
 export function matchChapter(content: string, matchRule: string, matchExtendRule: string) {
   const lines = content.split('\n')
-  const chapters: TocModel[] = []
+  const chapters: Dto.TocModel[] = []
   chapters.push({
     index: 0,
     text: '序 #0',
@@ -36,13 +35,13 @@ export function matchChapter(content: string, matchRule: string, matchExtendRule
         text: chapter[1] + ' ' + title + ' #' + index,
         title: chapter[1] + ' ' + title,
         index
-      } as TocModel)
+      } as Dto.TocModel)
     }
   })
   return chapters
 }
 
-export function matchDesc(content: string, chapters: Array<TocModel>, fileName: string) {
+export function matchDesc(content: string, chapters: Array<Dto.TocModel>, fileName: string) {
   if (fileName.endsWith('.txt')) {
     fileName = fileName.substring(0, fileName.length - 4)
   }
@@ -96,7 +95,7 @@ export function matchTitle(fileName: string) {
   return bookTitle
 }
 
-export function matchAuthor(content: string, chapters: Array<TocModel>, fileName: string) {
+export function matchAuthor(content: string, chapters: Array<Dto.TocModel>, fileName: string) {
   if (fileName.endsWith('.txt')) {
     fileName = fileName.substring(0, fileName.length - 4)
   }

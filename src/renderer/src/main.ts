@@ -1,34 +1,35 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { setupStore } from './store'
+import { setupI18n } from './locales'
+import { setupDayjs, setupIconifyOffline, setupLoading, setupNProgress } from './plugins'
+import './plugins/assets'
 import { setupRouter } from './router'
-import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import '@mdi/font/css/materialdesignicons.css'
-import { mdi } from 'vuetify/iconsets/mdi'
-import { md3 } from 'vuetify/blueprints'
+import { projectSetting } from './settings/projectSetting'
+import { setupStore } from './store'
+import { localStg } from './utils/storage'
 
-const app = createApp(App)
+async function setupApp() {
+  setupLoading()
 
-setupStore(app)
+  setupNProgress()
 
-setupRouter(app)
+  setupIconifyOffline()
 
-const vuetify = createVuetify({
-  theme: {
-    defaultTheme: 'dark'
-  },
-  blueprint: md3,
-  icons: {
-    defaultSet: 'mdi',
-    sets: {
-      mdi
-    }
-  },
-  components,
-  directives
-})
+  setupDayjs()
 
-app.use(vuetify).mount('#app')
+  const app = createApp(App)
+
+  if (!projectSetting.isAuth) {
+    localStg.set('token', 'NO-AUTH')
+  }
+
+  setupStore(app)
+
+  await setupRouter(app)
+
+  setupI18n(app)
+
+  app.mount('#app')
+}
+
+setupApp()

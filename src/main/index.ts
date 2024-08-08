@@ -1,21 +1,29 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { electronApp, is, optimizer } from '@electron-toolkit/utils'
+import { BrowserWindow, Menu, Tray, app, ipcMain, shell } from 'electron'
+import logger from 'electron-log'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import 'reflect-metadata'
 import icon from '../../resources/icon.png?asset'
-
+import { useAutoUpdater } from './service/auto-update'
+import { closeExpressServer, createExpressServer } from './service/express-server'
+import { Settings } from './settings'
+let httpServer
+let mainWindow: BrowserWindow
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 1300,
-    height: 880,
+  mainWindow = new BrowserWindow({
+    width: 1920,
+    height: 1080,
+    title: Settings.AppTitle + ' v' + app.getVersion(),
     show: false,
+    frame: false,
     resizable: true,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      webSecurity: false,
+      nodeIntegration: true,
       contextIsolation: true,
+      preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
@@ -66,8 +74,50 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    logger.info('app quit')
     app.quit()
   }
+})
+
+app.on('before-quit', function () {
+  // 停止服务器
+  closeExpressServer(httpServer)
+})
+
+app.whenReady().then(() => {
+  // 创建server
+  httpServer = createExpressServer()
+  // 检查更新
+  useAutoUpdater(mainWindow)
+  const tray = new Tray(icon)
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '恢复窗口',
+      click: () => {
+        /* 恢复窗口的逻辑 */
+        mainWindow.show()
+      }
+    },
+    {
+      label: '退出',
+      click: () => {
+        if (mainWindow.isClosable()) {
+          mainWindow.close()
+        }
+        app.quit()
+      }
+    }
+  ])
+  tray.setToolTip(Settings.AppDesc)
+  tray.setContextMenu(contextMenu)
+})
+
+ipcMain.on('hide-window', () => {
+  mainWindow.hide()
+})
+
+ipcMain.on('close-window', () => {
+  mainWindow.close()
 })
 
 // In this file you can include the rest of your app"s specific main process
